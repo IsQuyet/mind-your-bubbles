@@ -13,17 +13,13 @@
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/air-bar-tweaks/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
-		"main": [
-			"io.github.isquyet.airbartweaks.AirBarTweaks"
-		],
 		"client": [
 			"io.github.isquyet.airbartweaks.client.AirBarTweaksClient"
 		]
 	},
 	"mixins": [
-		"air-bar-tweaks.mixins.json",
 		{
 			"config": "air-bar-tweaks.client.mixins.json",
 			"environment": "client"

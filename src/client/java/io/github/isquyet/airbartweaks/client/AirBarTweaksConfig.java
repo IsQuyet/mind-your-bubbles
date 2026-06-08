@@ -3,7 +3,6 @@ package io.github.isquyet.airbartweaks.client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-import io.github.isquyet.airbartweaks.AirBarTweaks;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
@@ -42,7 +41,7 @@ public class AirBarTweaksConfig {
 
 			instance = config;
 		} catch (IOException | JsonParseException exception) {
-			AirBarTweaks.LOGGER.warn("Failed to load Air Bar Tweaks config. Using defaults.", exception);
+			AirBarTweaksClient.LOGGER.warn("Failed to load Air Bar Tweaks config. Using defaults.", exception);
 			instance = new AirBarTweaksConfig();
 		}
 	}
@@ -54,7 +53,7 @@ public class AirBarTweaksConfig {
 				GSON.toJson(instance, writer);
 			}
 		} catch (IOException exception) {
-			AirBarTweaks.LOGGER.warn("Failed to save Air Bar Tweaks config.", exception);
+			AirBarTweaksClient.LOGGER.warn("Failed to save Air Bar Tweaks config.", exception);
 		}
 	}
 
