@@ -1,0 +1,9 @@
+{
+	"air-bar-tweaks.config.title": "Ajustes da barra de ar",
+	"air-bar-tweaks.config.category.general": "Geral",
+	"air-bar-tweaks.config.visibility_mode": "Visibilidade da barra de ar",
+	"air-bar-tweaks.config.visibility_mode.tooltip": "Controla quando a barra de ar vanilla é exibida.",
+	"air-bar-tweaks.config.visibility_mode.vanilla": "Vanilla",
+	"air-bar-tweaks.config.visibility_mode.when_not_full": "Quando o ar não está cheio",
+	"air-bar-tweaks.config.visibility_mode.always": "Sempre mostrar"
+}

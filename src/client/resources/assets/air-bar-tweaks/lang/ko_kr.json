@@ -1,0 +1,9 @@
+{
+	"air-bar-tweaks.config.title": "공기 표시줄 조정",
+	"air-bar-tweaks.config.category.general": "일반",
+	"air-bar-tweaks.config.visibility_mode": "공기 표시줄 표시",
+	"air-bar-tweaks.config.visibility_mode.tooltip": "바닐라 공기 표시줄이 표시되는 시점을 제어합니다.",
+	"air-bar-tweaks.config.visibility_mode.vanilla": "바닐라",
+	"air-bar-tweaks.config.visibility_mode.when_not_full": "공기가 가득 차지 않았을 때",
+	"air-bar-tweaks.config.visibility_mode.always": "항상 표시"
+}
