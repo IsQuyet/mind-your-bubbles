@@ -9,6 +9,7 @@ It only changes the render timing of the vanilla air bar. It does not change bre
 - Client-side only
 - Keeps the vanilla air bar style and position
 - Supports simple JSON configuration
+- Supports optional in-game configuration with Mod Menu and Cloth Config
 - Does not need to be installed on servers
 
 ## Display modes
@@ -45,12 +46,19 @@ Example config:
 
 After editing the config file, restart the game for the change to take effect.
 
+If Mod Menu and Cloth Config are installed, the same option can also be changed in game from the Mod Menu config screen. Changes saved from the in-game screen take effect immediately.
+
 ## Requirements
 
 - Minecraft 1.21.11
 - Fabric Loader 0.19.3 or newer
 - Java 21 or newer
 - Fabric API
+
+Optional for in-game configuration:
+
+- Mod Menu
+- Cloth Config API
 
 ## Building
 

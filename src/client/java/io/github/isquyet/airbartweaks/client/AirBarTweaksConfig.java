@@ -60,4 +60,8 @@ public class AirBarTweaksConfig {
 	public AirBarVisibilityMode visibilityMode() {
 		return visibilityMode == null ? DEFAULT_VISIBILITY_MODE : visibilityMode;
 	}
+
+	public void setVisibilityMode(AirBarVisibilityMode visibilityMode) {
+		this.visibilityMode = visibilityMode == null ? DEFAULT_VISIBILITY_MODE : visibilityMode;
+	}
 }
