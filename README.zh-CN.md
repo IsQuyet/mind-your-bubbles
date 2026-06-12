@@ -1,6 +1,6 @@
 # Air Bar Tweaks
 
-[English](README.md)
+[English](README.md) | [简体中文](README.zh-CN.md)
 
 Air Bar Tweaks 是一个 Minecraft Fabric 客户端模组，用来控制原版空气条何时显示。
 

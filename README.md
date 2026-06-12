@@ -1,6 +1,6 @@
 # Air Bar Tweaks
 
-[简体中文](README.zh-CN.md)
+[English](README.md) | [简体中文](README.zh-CN.md)
 
 Air Bar Tweaks is a client-side Fabric mod for Minecraft that controls when the vanilla air bar appears.
 
