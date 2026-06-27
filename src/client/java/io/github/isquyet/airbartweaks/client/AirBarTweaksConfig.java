@@ -15,10 +15,12 @@ public class AirBarTweaksConfig {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("air-bar-tweaks.json");
 	private static final AirBarVisibilityMode DEFAULT_VISIBILITY_MODE = AirBarVisibilityMode.VANILLA;
+	private static final boolean DEFAULT_SMOOTH_AIR_BAR_ANIMATION = false;
 
 	private static AirBarTweaksConfig instance = new AirBarTweaksConfig();
 
 	private AirBarVisibilityMode visibilityMode = DEFAULT_VISIBILITY_MODE;
+	private boolean smoothAirBarAnimation = DEFAULT_SMOOTH_AIR_BAR_ANIMATION;
 
 	public static AirBarTweaksConfig get() {
 		return instance;
@@ -63,5 +65,13 @@ public class AirBarTweaksConfig {
 
 	public void setVisibilityMode(AirBarVisibilityMode visibilityMode) {
 		this.visibilityMode = visibilityMode == null ? DEFAULT_VISIBILITY_MODE : visibilityMode;
+	}
+
+	public boolean smoothAirBarAnimation() {
+		return smoothAirBarAnimation;
+	}
+
+	public void setSmoothAirBarAnimation(boolean smoothAirBarAnimation) {
+		this.smoothAirBarAnimation = smoothAirBarAnimation;
 	}
 }

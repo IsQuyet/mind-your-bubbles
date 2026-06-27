@@ -5,5 +5,7 @@
 	"air-bar-tweaks.config.visibility_mode.tooltip": "Legt fest, wann die Vanilla-Luftleiste angezeigt wird.",
 	"air-bar-tweaks.config.visibility_mode.vanilla": "Vanilla",
 	"air-bar-tweaks.config.visibility_mode.when_not_full": "Wenn Luft nicht voll ist",
-	"air-bar-tweaks.config.visibility_mode.always": "Immer anzeigen"
+	"air-bar-tweaks.config.visibility_mode.always": "Immer anzeigen",
+	"air-bar-tweaks.config.smooth_air_bar_animation": "Luftleistenanimation glätten",
+	"air-bar-tweaks.config.smooth_air_bar_animation.tooltip": "Glättet die Luftleiste, wenn sich der Entitätswert Air in großen Schritten ändert. Betrifft nur die HUD-Anzeige."
 }

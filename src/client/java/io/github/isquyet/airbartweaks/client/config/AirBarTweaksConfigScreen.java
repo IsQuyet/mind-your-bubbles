@@ -34,6 +34,16 @@ public final class AirBarTweaksConfigScreen {
 				.setSaveConsumer(config::setVisibilityMode)
 				.build());
 
+		general.addEntry(entryBuilder
+				.startBooleanToggle(
+						Component.translatable("air-bar-tweaks.config.smooth_air_bar_animation"),
+						config.smoothAirBarAnimation()
+				)
+				.setDefaultValue(false)
+				.setTooltip(Component.translatable("air-bar-tweaks.config.smooth_air_bar_animation.tooltip"))
+				.setSaveConsumer(config::setSmoothAirBarAnimation)
+				.build());
+
 		builder.setSavingRunnable(AirBarTweaksConfig::save);
 		return builder.build();
 	}

@@ -5,5 +5,7 @@
 	"air-bar-tweaks.config.visibility_mode.tooltip": "控制原版氧气条何时显示。",
 	"air-bar-tweaks.config.visibility_mode.vanilla": "原版",
 	"air-bar-tweaks.config.visibility_mode.when_not_full": "氧气未满时",
-	"air-bar-tweaks.config.visibility_mode.always": "始终显示"
+	"air-bar-tweaks.config.visibility_mode.always": "始终显示",
+	"air-bar-tweaks.config.smooth_air_bar_animation": "平滑氧气条动画",
+	"air-bar-tweaks.config.smooth_air_bar_animation.tooltip": "当实体 Air 值大幅跳变时平滑氧气条动画。仅影响 HUD 显示。"
 }

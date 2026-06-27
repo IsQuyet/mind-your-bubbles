@@ -17,6 +17,7 @@ The entity `Air` value can support more than an underwater warning. Mods, plugin
 - Client-side only
 - Does not need to be installed on servers
 - Supports JSON configuration
+- Can smooth the air bar when the entity `Air` value changes in large steps
 - Adds an in-game config screen when Mod Menu and Cloth Config are installed
 
 ## Display modes
@@ -28,6 +29,10 @@ Choose one visibility mode:
 | `VANILLA` | Uses Minecraft's original air bar behavior. This is the default mode. |
 | `WHEN_NOT_FULL` | Shows the air bar when the player's `Air` value is below its maximum. |
 | `ALWAYS` | Shows the air bar at all times. |
+
+## Visual smoothing
+
+The optional smooth air bar animation setting helps preserve the vanilla bubble pop animation when a server-side plugin or datapack changes the player's `Air` value in larger steps.
 
 ## Configuration
 
@@ -47,13 +52,14 @@ Example config:
 
 ```json
 {
-  "visibilityMode": "VANILLA"
+  "visibilityMode": "VANILLA",
+  "smoothAirBarAnimation": false
 }
 ```
 
 Restart the game after editing the config file.
 
-If Mod Menu and Cloth Config are installed, you can also change the same option from the Mod Menu config screen. The in-game screen saves changes immediately.
+If Mod Menu and Cloth Config are installed, you can also change these options from the Mod Menu config screen. The in-game screen saves changes immediately.
 
 ## Requirements
 
@@ -69,7 +75,7 @@ For the in-game config screen:
 
 ## Compatibility
 
-Air Bar Tweaks only controls vanilla air bar visibility. It does not modify breathing mechanics, air bar textures, HUD layout, or other HUD bars such as:
+Air Bar Tweaks only controls vanilla air bar visibility and optional visual animation smoothing. It does not modify breathing mechanics, air bar textures, HUD layout, or other HUD bars such as:
 
 - The food bar
 - The health bar
