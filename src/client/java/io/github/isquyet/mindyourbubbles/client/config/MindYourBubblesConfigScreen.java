@@ -39,7 +39,7 @@ public final class MindYourBubblesConfigScreen {
 						Component.translatable("mind-your-bubbles.config.smooth_air_bar_animation"),
 						config.smoothAirBarAnimation()
 				)
-				.setDefaultValue(false)
+				.setDefaultValue(true)
 				.setTooltip(Component.translatable("mind-your-bubbles.config.smooth_air_bar_animation.tooltip"))
 				.setSaveConsumer(config::setSmoothAirBarAnimation)
 				.build());

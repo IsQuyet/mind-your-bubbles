@@ -15,7 +15,7 @@ public class MindYourBubblesConfig {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("mind-your-bubbles.json");
 	private static final AirBarVisibilityMode DEFAULT_VISIBILITY_MODE = AirBarVisibilityMode.VANILLA;
-	private static final boolean DEFAULT_SMOOTH_AIR_BAR_ANIMATION = false;
+	private static final boolean DEFAULT_SMOOTH_AIR_BAR_ANIMATION = true;
 
 	private static MindYourBubblesConfig instance = new MindYourBubblesConfig();
 

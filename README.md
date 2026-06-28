@@ -53,7 +53,7 @@ Example config:
 ```json
 {
   "visibilityMode": "VANILLA",
-  "smoothAirBarAnimation": false
+  "smoothAirBarAnimation": true
 }
 ```
 

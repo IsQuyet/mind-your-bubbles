@@ -1,7 +1,6 @@
 package io.github.isquyet.mindyourbubbles.client.mixin;
 
 import io.github.isquyet.mindyourbubbles.client.MindYourBubblesConfig;
-import io.github.isquyet.mindyourbubbles.client.MindYourBubblesClient;
 import io.github.isquyet.mindyourbubbles.client.AirBarVisibilityMode;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -54,9 +53,6 @@ public class AirBarBubblesMixin {
 	private int mindYourBubbles$transitionToBubbleCount = Integer.MIN_VALUE;
 	@Unique
 	private int mindYourBubbles$transitionStartTick = Integer.MIN_VALUE;
-	@Unique
-	private static final boolean MIND_YOUR_BUBBLES_DEBUG_ANIMATION = Boolean.getBoolean("mindYourBubbles.debugAirAnimation")
-			|| "true".equalsIgnoreCase(System.getenv("MIND_YOUR_BUBBLES_DEBUG_AIR_ANIMATION"));
 	@Unique
 	private static final int MIND_YOUR_BUBBLES_POPPING_TICKS = 2;
 	@Unique
@@ -166,7 +162,6 @@ public class AirBarBubblesMixin {
 		}
 
 		mindYourBubbles$renderTransitionAirBar(guiGraphics, vehicleHearts, y, right, phase);
-		mindYourBubbles$debugAirAnimation(phase == MIND_YOUR_BUBBLES_PHASE_POPPING ? "popping" : "blank", player, actualAir, maxAir);
 		return true;
 	}
 
@@ -184,7 +179,6 @@ public class AirBarBubblesMixin {
 		mindYourBubbles$transitionFromBubbleCount = mindYourBubbles$lastVisualBubbleCount;
 		mindYourBubbles$transitionToBubbleCount = targetVisualBubbleCount;
 		mindYourBubbles$transitionStartTick = tickCount;
-		mindYourBubbles$debugAirAnimation("start", player, actualAir, maxAir);
 	}
 
 	@Unique
@@ -264,26 +258,5 @@ public class AirBarBubblesMixin {
 	private static int mindYourBubbles$getAirBubbleCount(int air, int maxAir, int offset) {
 		int count = (int) Math.ceil((double) (air + offset) * 10.0D / maxAir);
 		return Math.max(0, Math.min(count, 10));
-	}
-
-	@Unique
-	private void mindYourBubbles$debugAirAnimation(String phase, Player player, int actualAir, int maxAir) {
-		if (!MIND_YOUR_BUBBLES_DEBUG_ANIMATION) {
-			return;
-		}
-
-		MindYourBubblesClient.LOGGER.info(
-				"Air animation phase={}, tick={}, player={}, actualAir={}, maxAir={}, lastActualAir={}, lastVisualBubbleCount={}, transitionFrom={}, transitionTo={}, inWater={}",
-				phase,
-				tickCount,
-				player.getId(),
-				actualAir,
-				maxAir,
-				mindYourBubbles$lastActualAir,
-				mindYourBubbles$lastVisualBubbleCount,
-				mindYourBubbles$transitionFromBubbleCount,
-				mindYourBubbles$transitionToBubbleCount,
-				player.isEyeInFluid(FluidTags.WATER)
-		);
 	}
 }
