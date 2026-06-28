@@ -1,0 +1,11 @@
+{
+	"mind-your-bubbles.config.title": "管好你的气泡条",
+	"mind-your-bubbles.config.category.general": "通用",
+	"mind-your-bubbles.config.visibility_mode": "氧气条显示",
+	"mind-your-bubbles.config.visibility_mode.tooltip": "控制原版氧气条何时显示。",
+	"mind-your-bubbles.config.visibility_mode.vanilla": "原版",
+	"mind-your-bubbles.config.visibility_mode.when_not_full": "氧气未满时",
+	"mind-your-bubbles.config.visibility_mode.always": "始终显示",
+	"mind-your-bubbles.config.smooth_air_bar_animation": "平滑氧气条动画",
+	"mind-your-bubbles.config.smooth_air_bar_animation.tooltip": "当实体 Air 值大幅跳变时平滑氧气条动画。仅影响 HUD 显示。"
+}

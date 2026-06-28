@@ -1,31 +1,31 @@
 {
 	"schemaVersion": 1,
-	"id": "air-bar-tweaks",
+	"id": "mind-your-bubbles",
 	"version": "${version}",
-	"name": "Air Bar Tweaks",
+	"name": "Mind Your Bubbles",
 	"description": "A client-side Minecraft mod that lets you configure when the vanilla air bar is displayed.",
 	"authors": [
 		"Quyet"
 	],
 	"contact": {
 		"homepage": "https://github.com/IsQuyet",
-		"sources": "https://github.com/IsQuyet/air-bar-tweaks",
-		"issues": "https://github.com/IsQuyet/air-bar-tweaks/issues"
+		"sources": "https://github.com/IsQuyet/mind-your-bubbles",
+		"issues": "https://github.com/IsQuyet/mind-your-bubbles/issues"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/air-bar-tweaks/icon.png",
+	"icon": "assets/mind-your-bubbles/icon.png",
 	"environment": "client",
 	"entrypoints": {
 		"client": [
-			"io.github.isquyet.airbartweaks.client.AirBarTweaksClient"
+			"io.github.isquyet.mindyourbubbles.client.MindYourBubblesClient"
 		],
 		"modmenu": [
-			"io.github.isquyet.airbartweaks.client.config.AirBarTweaksModMenu"
+			"io.github.isquyet.mindyourbubbles.client.config.MindYourBubblesModMenu"
 		]
 	},
 	"mixins": [
 		{
-			"config": "air-bar-tweaks.client.mixins.json",
+			"config": "mind-your-bubbles.client.mixins.json",
 			"environment": "client"
 		}
 	],

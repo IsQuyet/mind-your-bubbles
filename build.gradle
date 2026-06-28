@@ -26,7 +26,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"air-bar-tweaks" {
+		"mind-your-bubbles" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}

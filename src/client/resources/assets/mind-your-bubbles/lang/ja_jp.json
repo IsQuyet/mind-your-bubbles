@@ -1,0 +1,11 @@
+{
+	"mind-your-bubbles.config.title": "Mind Your Bubbles",
+	"mind-your-bubbles.config.category.general": "一般",
+	"mind-your-bubbles.config.visibility_mode": "酸素ゲージの表示",
+	"mind-your-bubbles.config.visibility_mode.tooltip": "バニラの酸素ゲージを表示するタイミングを制御します。",
+	"mind-your-bubbles.config.visibility_mode.vanilla": "バニラ",
+	"mind-your-bubbles.config.visibility_mode.when_not_full": "酸素が満タンでない時",
+	"mind-your-bubbles.config.visibility_mode.always": "常に表示",
+	"mind-your-bubbles.config.smooth_air_bar_animation": "酸素ゲージのアニメーションを滑らかにする",
+	"mind-your-bubbles.config.smooth_air_bar_animation.tooltip": "エンティティの Air 値が大きく変化したときに酸素ゲージのアニメーションを滑らかにします。HUD 表示のみに影響します。"
+}

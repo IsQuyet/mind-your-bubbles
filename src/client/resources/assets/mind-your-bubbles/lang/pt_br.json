@@ -1,0 +1,11 @@
+{
+	"mind-your-bubbles.config.title": "Mind Your Bubbles",
+	"mind-your-bubbles.config.category.general": "Geral",
+	"mind-your-bubbles.config.visibility_mode": "Visibilidade da barra de ar",
+	"mind-your-bubbles.config.visibility_mode.tooltip": "Controla quando a barra de ar vanilla é exibida.",
+	"mind-your-bubbles.config.visibility_mode.vanilla": "Vanilla",
+	"mind-your-bubbles.config.visibility_mode.when_not_full": "Quando o ar não está cheio",
+	"mind-your-bubbles.config.visibility_mode.always": "Sempre mostrar",
+	"mind-your-bubbles.config.smooth_air_bar_animation": "Suavizar animação da barra de ar",
+	"mind-your-bubbles.config.smooth_air_bar_animation.tooltip": "Suaviza a barra de ar quando o valor Air da entidade muda em grandes saltos. Afeta apenas o HUD."
+}

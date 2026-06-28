@@ -1,0 +1,11 @@
+{
+	"mind-your-bubbles.config.title": "Mind Your Bubbles",
+	"mind-your-bubbles.config.category.general": "일반",
+	"mind-your-bubbles.config.visibility_mode": "공기 표시줄 표시",
+	"mind-your-bubbles.config.visibility_mode.tooltip": "바닐라 공기 표시줄이 표시되는 시점을 제어합니다.",
+	"mind-your-bubbles.config.visibility_mode.vanilla": "바닐라",
+	"mind-your-bubbles.config.visibility_mode.when_not_full": "공기가 가득 차지 않았을 때",
+	"mind-your-bubbles.config.visibility_mode.always": "항상 표시",
+	"mind-your-bubbles.config.smooth_air_bar_animation": "공기 표시줄 애니메이션 부드럽게",
+	"mind-your-bubbles.config.smooth_air_bar_animation.tooltip": "엔티티 Air 값이 크게 변할 때 공기 표시줄 애니메이션을 부드럽게 합니다. HUD 표시에만 영향을 줍니다."
+}

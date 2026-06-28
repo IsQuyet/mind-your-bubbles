@@ -1,4 +1,4 @@
-package io.github.isquyet.airbartweaks.client;
+package io.github.isquyet.mindyourbubbles.client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,40 +11,40 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class AirBarTweaksConfig {
+public class MindYourBubblesConfig {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("air-bar-tweaks.json");
+	private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("mind-your-bubbles.json");
 	private static final AirBarVisibilityMode DEFAULT_VISIBILITY_MODE = AirBarVisibilityMode.VANILLA;
 	private static final boolean DEFAULT_SMOOTH_AIR_BAR_ANIMATION = false;
 
-	private static AirBarTweaksConfig instance = new AirBarTweaksConfig();
+	private static MindYourBubblesConfig instance = new MindYourBubblesConfig();
 
 	private AirBarVisibilityMode visibilityMode = DEFAULT_VISIBILITY_MODE;
 	private boolean smoothAirBarAnimation = DEFAULT_SMOOTH_AIR_BAR_ANIMATION;
 
-	public static AirBarTweaksConfig get() {
+	public static MindYourBubblesConfig get() {
 		return instance;
 	}
 
 	public static void load() {
 		if (Files.notExists(CONFIG_PATH)) {
-			instance = new AirBarTweaksConfig();
+			instance = new MindYourBubblesConfig();
 			save();
 			return;
 		}
 
 		try (Reader reader = Files.newBufferedReader(CONFIG_PATH)) {
-			AirBarTweaksConfig config = GSON.fromJson(reader, AirBarTweaksConfig.class);
+			MindYourBubblesConfig config = GSON.fromJson(reader, MindYourBubblesConfig.class);
 			if (config == null || config.visibilityMode == null) {
-				instance = new AirBarTweaksConfig();
+				instance = new MindYourBubblesConfig();
 				save();
 				return;
 			}
 
 			instance = config;
 		} catch (IOException | JsonParseException exception) {
-			AirBarTweaksClient.LOGGER.warn("Failed to load Air Bar Tweaks config. Using defaults.", exception);
-			instance = new AirBarTweaksConfig();
+			MindYourBubblesClient.LOGGER.warn("Failed to load Mind Your Bubbles config. Using defaults.", exception);
+			instance = new MindYourBubblesConfig();
 		}
 	}
 
@@ -55,7 +55,7 @@ public class AirBarTweaksConfig {
 				GSON.toJson(instance, writer);
 			}
 		} catch (IOException exception) {
-			AirBarTweaksClient.LOGGER.warn("Failed to save Air Bar Tweaks config.", exception);
+			MindYourBubblesClient.LOGGER.warn("Failed to save Mind Your Bubbles config.", exception);
 		}
 	}
 

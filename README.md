@@ -1,14 +1,14 @@
-# Air Bar Tweaks
+# Mind Your Bubbles
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-Air Bar Tweaks is a client-side Fabric mod for Minecraft that controls when the vanilla air bar appears.
+Mind Your Bubbles is a client-side Fabric mod for Minecraft that controls when the vanilla air bar appears.
 
 ## Why this mod?
 
 Minecraft stores the player's remaining breath as the entity `Air` value. The vanilla HUD only shows that value in a few situations. Many players only notice it underwater, even though it is part of the survival rules.
 
-Air Bar Tweaks makes that value easier to notice. You decide when the vanilla air bar appears.
+Mind Your Bubbles makes that value easier to notice. You decide when the vanilla air bar appears.
 
 The entity `Air` value can support more than an underwater warning. Mods, plugins, maps, and gameplay experiments can treat it as a resource worth designing around.
 
@@ -36,16 +36,16 @@ The optional smooth air bar animation setting helps preserve the vanilla bubble 
 
 ## Configuration
 
-Air Bar Tweaks creates this config file after the game starts:
+Mind Your Bubbles creates this config file after the game starts:
 
 ```text
-.minecraft/config/air-bar-tweaks.json
+.minecraft/config/mind-your-bubbles.json
 ```
 
 In a development environment, the file is created under:
 
 ```text
-run/config/air-bar-tweaks.json
+run/config/mind-your-bubbles.json
 ```
 
 Example config:
@@ -75,7 +75,7 @@ For the in-game config screen:
 
 ## Compatibility
 
-Air Bar Tweaks only controls vanilla air bar visibility and optional visual animation smoothing. It does not modify breathing mechanics, air bar textures, HUD layout, or other HUD bars such as:
+Mind Your Bubbles only controls vanilla air bar visibility and optional visual animation smoothing. It does not modify breathing mechanics, air bar textures, HUD layout, or other HUD bars such as:
 
 - The food bar
 - The health bar

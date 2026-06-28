@@ -1,0 +1,11 @@
+{
+	"mind-your-bubbles.config.title": "Mind Your Bubbles",
+	"mind-your-bubbles.config.category.general": "Allgemein",
+	"mind-your-bubbles.config.visibility_mode": "Anzeige der Luftleiste",
+	"mind-your-bubbles.config.visibility_mode.tooltip": "Legt fest, wann die Vanilla-Luftleiste angezeigt wird.",
+	"mind-your-bubbles.config.visibility_mode.vanilla": "Vanilla",
+	"mind-your-bubbles.config.visibility_mode.when_not_full": "Wenn Luft nicht voll ist",
+	"mind-your-bubbles.config.visibility_mode.always": "Immer anzeigen",
+	"mind-your-bubbles.config.smooth_air_bar_animation": "Luftleistenanimation glätten",
+	"mind-your-bubbles.config.smooth_air_bar_animation.tooltip": "Glättet die Luftleiste, wenn sich der Entitätswert Air in großen Schritten ändert. Betrifft nur die HUD-Anzeige."
+}

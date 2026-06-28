@@ -1,0 +1,11 @@
+{
+	"mind-your-bubbles.config.title": "Mind Your Bubbles",
+	"mind-your-bubbles.config.category.general": "Général",
+	"mind-your-bubbles.config.visibility_mode": "Affichage de la barre d'air",
+	"mind-your-bubbles.config.visibility_mode.tooltip": "Contrôle quand la barre d'air vanilla est affichée.",
+	"mind-your-bubbles.config.visibility_mode.vanilla": "Vanilla",
+	"mind-your-bubbles.config.visibility_mode.when_not_full": "Quand l'air n'est pas plein",
+	"mind-your-bubbles.config.visibility_mode.always": "Toujours afficher",
+	"mind-your-bubbles.config.smooth_air_bar_animation": "Lisser l'animation de la barre d'air",
+	"mind-your-bubbles.config.smooth_air_bar_animation.tooltip": "Lisse la barre d'air lorsque la valeur Air de l'entité change par grands paliers. Affecte uniquement le HUD."
+}

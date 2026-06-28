@@ -1,4 +1,4 @@
-package io.github.isquyet.airbartweaks.client;
+package io.github.isquyet.mindyourbubbles.client;
 
 public enum AirBarVisibilityMode {
 	VANILLA,

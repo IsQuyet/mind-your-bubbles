@@ -1,0 +1,11 @@
+{
+	"mind-your-bubbles.config.title": "Mind Your Bubbles",
+	"mind-your-bubbles.config.category.general": "General",
+	"mind-your-bubbles.config.visibility_mode": "Air Bar Visibility",
+	"mind-your-bubbles.config.visibility_mode.tooltip": "Controls when the vanilla air bar is displayed.",
+	"mind-your-bubbles.config.visibility_mode.vanilla": "Vanilla",
+	"mind-your-bubbles.config.visibility_mode.when_not_full": "When Not Full",
+	"mind-your-bubbles.config.visibility_mode.always": "Always",
+	"mind-your-bubbles.config.smooth_air_bar_animation": "Smooth Air Bar Animation",
+	"mind-your-bubbles.config.smooth_air_bar_animation.tooltip": "Smooths the air bar when the entity Air value changes in large steps. Only affects the HUD."
+}
