@@ -6,7 +6,9 @@ Mind Your Bubbles is a client-side Fabric mod for Minecraft that turns the vanil
 
 ## Why this mod?
 
-Minecraft tracks a player's remaining breath as the entity `Air` value, but the vanilla HUD only draws attention to it in limited situations. Mind Your Bubbles keeps the vanilla air bar while making `Air` easier to notice, read, and design around.
+Minecraft stores the player's remaining breath as the entity `Air` value. The vanilla HUD only shows that value in a few situations. Many players only notice it underwater, even though it is part of the survival rules.
+
+Mind Your Bubbles makes that value easier to notice and gives it a more consistent display. The entity `Air` value can support more than an underwater warning, and mods, plugins, maps, and gameplay experiments can treat it as a resource worth designing around.
 
 ## Features
 
