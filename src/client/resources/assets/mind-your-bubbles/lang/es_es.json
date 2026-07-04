@@ -1,4 +1,6 @@
 {
+	"modmenu.nameTranslation.mind-your-bubbles": "Mind Your Bubbles",
+	"modmenu.descriptionTranslation.mind-your-bubbles": "Controla cuándo se muestra la barra de aire vanilla y suaviza la animación cuando el valor Air cambia en grandes saltos.",
 	"mind-your-bubbles.config.title": "Mind Your Bubbles",
 	"mind-your-bubbles.config.category.general": "General",
 	"mind-your-bubbles.config.visibility_mode": "Visibilidad de la barra de aire",

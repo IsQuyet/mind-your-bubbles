@@ -1,4 +1,6 @@
 {
+	"modmenu.nameTranslation.mind-your-bubbles": "管好你的氣泡條",
+	"modmenu.descriptionTranslation.mind-your-bubbles": "控制原版氧氣條的顯示，並在 Air 值大幅變化時平滑動畫。",
 	"mind-your-bubbles.config.title": "管好你的氣泡條",
 	"mind-your-bubbles.config.category.general": "一般",
 	"mind-your-bubbles.config.visibility_mode": "氧氣條顯示",

@@ -1,4 +1,6 @@
 {
+	"modmenu.nameTranslation.mind-your-bubbles": "Mind Your Bubbles",
+	"modmenu.descriptionTranslation.mind-your-bubbles": "Steuert die Anzeige der Vanilla-Luftleiste und glättet die Animation bei großen Änderungen des Air-Werts.",
 	"mind-your-bubbles.config.title": "Mind Your Bubbles",
 	"mind-your-bubbles.config.category.general": "Allgemein",
 	"mind-your-bubbles.config.visibility_mode": "Anzeige der Luftleiste",

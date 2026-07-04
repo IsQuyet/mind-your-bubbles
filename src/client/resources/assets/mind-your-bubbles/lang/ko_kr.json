@@ -1,4 +1,6 @@
 {
+	"modmenu.nameTranslation.mind-your-bubbles": "Mind Your Bubbles",
+	"modmenu.descriptionTranslation.mind-your-bubbles": "바닐라 공기 표시줄 표시를 제어하고 Air 값이 크게 변할 때 애니메이션을 부드럽게 합니다.",
 	"mind-your-bubbles.config.title": "Mind Your Bubbles",
 	"mind-your-bubbles.config.category.general": "일반",
 	"mind-your-bubbles.config.visibility_mode": "공기 표시줄 표시",

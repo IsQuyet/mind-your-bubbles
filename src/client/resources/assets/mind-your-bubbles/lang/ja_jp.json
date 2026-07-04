@@ -1,4 +1,6 @@
 {
+	"modmenu.nameTranslation.mind-your-bubbles": "Mind Your Bubbles",
+	"modmenu.descriptionTranslation.mind-your-bubbles": "バニラの酸素ゲージの表示を制御し、Air 値が大きく変化したときのアニメーションを滑らかにします。",
 	"mind-your-bubbles.config.title": "Mind Your Bubbles",
 	"mind-your-bubbles.config.category.general": "一般",
 	"mind-your-bubbles.config.visibility_mode": "酸素ゲージの表示",

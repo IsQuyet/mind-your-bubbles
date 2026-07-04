@@ -1,4 +1,6 @@
 {
+	"modmenu.nameTranslation.mind-your-bubbles": "Mind Your Bubbles",
+	"modmenu.descriptionTranslation.mind-your-bubbles": "Controls when the vanilla air bar appears and smooths large Air value changes.",
 	"mind-your-bubbles.config.title": "Mind Your Bubbles",
 	"mind-your-bubbles.config.category.general": "General",
 	"mind-your-bubbles.config.visibility_mode": "Air Bar Visibility",

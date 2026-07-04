@@ -1,4 +1,6 @@
 {
+	"modmenu.nameTranslation.mind-your-bubbles": "Mind Your Bubbles",
+	"modmenu.descriptionTranslation.mind-your-bubbles": "Contrôle l'affichage de la barre d'air vanilla et lisse l'animation lors de grands changements de la valeur Air.",
 	"mind-your-bubbles.config.title": "Mind Your Bubbles",
 	"mind-your-bubbles.config.category.general": "Général",
 	"mind-your-bubbles.config.visibility_mode": "Affichage de la barre d'air",
