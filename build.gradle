@@ -1,5 +1,8 @@
+import me.modmuss50.mpp.ReleaseType
+
 plugins {
 	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+	id 'me.modmuss50.mod-publish-plugin' version '1.1.0'
 	id 'maven-publish'
 }
 
@@ -94,4 +97,74 @@ publishing {
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
 	}
+}
+
+publishMods {
+	if (project.hasProperty("build.release")) {
+		def releaseDestination = providers.gradleProperty("build.release.destination").orElse("GH+MR").get()
+		def publishToGithub = releaseDestination.contains("GH")
+		def publishToModrinth = releaseDestination.contains("MR")
+		def releaseJar = tasks.named("remapJar").flatMap { remapJarTask -> remapJarTask.archiveFile }
+		def releaseTag = createReleaseTag(project)
+		def releaseDisplayName = createReleaseDisplayName(project)
+
+		type = releaseTypeForVersion(project.mod_version)
+		changelog = readReleaseChangelog(project)
+
+		if (publishToGithub) {
+			github {
+				accessToken = providers.environmentVariable("GITHUB_TOKEN")
+				repository = providers.gradleProperty("github_repository").get()
+				commitish = providers.environmentVariable("GITHUB_SHA").orElse("main").get()
+				version = releaseTag
+				displayName = releaseDisplayName
+				file.set(releaseJar)
+			}
+		}
+
+		if (publishToModrinth) {
+			modrinth {
+				accessToken = providers.environmentVariable("MODRINTH_API_KEY")
+				projectId = providers.gradleProperty("modrinth_project_id").get()
+				file.set(releaseJar)
+				version = releaseTag
+				displayName = releaseDisplayName
+				minecraftVersions.add(project.minecraft_version)
+				modLoaders.add("fabric")
+			}
+		}
+	}
+}
+
+String createReleaseTag(Project project) {
+	return "mc${project.minecraft_version}-${project.mod_version}"
+}
+
+String createReleaseDisplayName(Project project) {
+	return "Mind Your Bubbles ${project.mod_version} for Minecraft ${project.minecraft_version}"
+}
+
+ReleaseType releaseTypeForVersion(String modVersion) {
+	String normalizedModVersion = modVersion.toLowerCase(Locale.ROOT)
+	if (normalizedModVersion.contains("alpha")) {
+		return ReleaseType.ALPHA
+	}
+
+	if (normalizedModVersion.contains("beta")) {
+		return ReleaseType.BETA
+	}
+
+	return ReleaseType.STABLE
+}
+
+String readReleaseChangelog(Project project) {
+	File changelogFile = project.rootProject.file("CHANGELOG.md")
+	String changelogText = changelogFile.getText("UTF-8")
+	String[] changelogParts = changelogText.split("----------", 2)
+	String releaseChangelog = changelogParts.length > 1 ? changelogParts[1] : changelogParts[0]
+
+	return releaseChangelog.trim()
+		.replace("[ReleaseTag]()", createReleaseTag(project))
+		.replace("[MCVersion]()", project.minecraft_version)
+		.replace("[ModVersion]()", project.mod_version)
 }
