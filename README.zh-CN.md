@@ -65,7 +65,6 @@ run/config/mind-your-bubbles.json
 - Minecraft 1.21.11
 - Fabric Loader 0.19.3 或更新版本
 - Java 21 或更新版本
-- Fabric API
 
 游戏内配置界面的可选依赖：
 

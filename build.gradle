@@ -40,9 +40,6 @@ dependencies {
 	mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-
 	// Optional config screen integration. These are not bundled or required at runtime.
 	modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"

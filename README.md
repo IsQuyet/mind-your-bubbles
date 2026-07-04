@@ -65,7 +65,6 @@ Restart the game after editing the config file manually. If Mod Menu and Cloth C
 - Minecraft 1.21.11
 - Fabric Loader 0.19.3 or newer
 - Java 21 or newer
-- Fabric API
 
 Optional for the in-game config screen:
 
