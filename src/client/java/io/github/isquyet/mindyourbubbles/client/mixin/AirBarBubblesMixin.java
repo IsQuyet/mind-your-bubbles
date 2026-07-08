@@ -80,7 +80,28 @@ public class AirBarBubblesMixin {
 	private boolean mindYourBubbles$shouldRenderCustomAirBar;
 
 	@Unique
-	private boolean mindYourBubbles$renderedCustomAirBar;
+	private boolean mindYourBubbles$observedAirBubbleThisFrame;
+
+	@Unique
+	private int mindYourBubbles$observedAirBubbleRight;
+
+	@Unique
+	private int mindYourBubbles$observedAirBubbleY;
+
+	@Unique
+	private boolean mindYourBubbles$hasLastObservedAirBubblePosition;
+
+	@Unique
+	private int mindYourBubbles$lastObservedAirBubbleRight;
+
+	@Unique
+	private int mindYourBubbles$lastObservedAirBubbleY;
+
+	@Unique
+	private int mindYourBubbles$lastObservedGuiWidth;
+
+	@Unique
+	private int mindYourBubbles$lastObservedGuiHeight;
 
 	@Inject(method = "renderPlayerHealth", at = @At("HEAD"))
 	private void mindYourBubbles$prepareAirBarRender(GuiGraphics guiGraphics, CallbackInfo callbackInfo) {
@@ -88,7 +109,7 @@ public class AirBarBubblesMixin {
 		mindYourBubbles$currentPlayer = player;
 		mindYourBubbles$shouldSkipVanillaAirBar = false;
 		mindYourBubbles$shouldRenderCustomAirBar = false;
-		mindYourBubbles$renderedCustomAirBar = false;
+		mindYourBubbles$observedAirBubbleThisFrame = false;
 
 		if (player == null) {
 			return;
@@ -133,14 +154,11 @@ public class AirBarBubblesMixin {
 			return;
 		}
 
+		mindYourBubbles$recordObservedAirBubblePosition(guiGraphics, x, y, width);
+
 		if (!mindYourBubbles$shouldSkipVanillaAirBar) {
 			guiGraphics.blitSprite(sprite, x, y, width, height);
 			return;
-		}
-
-		if (mindYourBubbles$shouldRenderCustomAirBar && !mindYourBubbles$renderedCustomAirBar && mindYourBubbles$currentPlayer != null) {
-			mindYourBubbles$renderSmoothAirBar(guiGraphics, mindYourBubbles$currentPlayer, x + width, y);
-			mindYourBubbles$renderedCustomAirBar = true;
 		}
 	}
 
@@ -152,7 +170,7 @@ public class AirBarBubblesMixin {
 		}
 
 		int maxAir = mindYourBubbles$currentPlayer.getMaxAirSupply();
-		if (!mindYourBubbles$renderedCustomAirBar && mindYourBubbles$shouldRenderCustomAirBar) {
+		if (mindYourBubbles$shouldRenderCustomAirBar) {
 			mindYourBubbles$renderSmoothAirBar(guiGraphics, mindYourBubbles$currentPlayer, mindYourBubbles$getAirBubbleRight(guiGraphics), mindYourBubbles$getAirBubbleY(guiGraphics));
 		} else if (maxAir > 0 && AirBarPolicy.shouldForceFullAirBar(mindYourBubbles$currentVisibilityMode, mindYourBubbles$currentAirIsFull, mindYourBubbles$currentInWater)) {
 			mindYourBubbles$resetAirAnimation(mindYourBubbles$currentPlayer, mindYourBubbles$currentPlayer.getAirSupply(), maxAir);
@@ -219,12 +237,43 @@ public class AirBarBubblesMixin {
 	}
 
 	@Unique
+	private void mindYourBubbles$recordObservedAirBubblePosition(GuiGraphics guiGraphics, int x, int y, int width) {
+		int airBubbleRight = x + width;
+		if (!mindYourBubbles$observedAirBubbleThisFrame || airBubbleRight > mindYourBubbles$observedAirBubbleRight) {
+			mindYourBubbles$observedAirBubbleThisFrame = true;
+			mindYourBubbles$observedAirBubbleRight = airBubbleRight;
+			mindYourBubbles$observedAirBubbleY = y;
+			mindYourBubbles$hasLastObservedAirBubblePosition = true;
+			mindYourBubbles$lastObservedAirBubbleRight = airBubbleRight;
+			mindYourBubbles$lastObservedAirBubbleY = y;
+			mindYourBubbles$lastObservedGuiWidth = guiGraphics.guiWidth();
+			mindYourBubbles$lastObservedGuiHeight = guiGraphics.guiHeight();
+		}
+	}
+
+	@Unique
 	private int mindYourBubbles$getAirBubbleRight(GuiGraphics guiGraphics) {
+		if (mindYourBubbles$observedAirBubbleThisFrame) {
+			return mindYourBubbles$observedAirBubbleRight;
+		}
+
+		if (mindYourBubbles$hasLastObservedAirBubblePosition && mindYourBubbles$lastObservedGuiSizeMatches(guiGraphics)) {
+			return mindYourBubbles$lastObservedAirBubbleRight;
+		}
+
 		return guiGraphics.guiWidth() / 2 + 91;
 	}
 
 	@Unique
 	private int mindYourBubbles$getAirBubbleY(GuiGraphics guiGraphics) {
+		if (mindYourBubbles$observedAirBubbleThisFrame) {
+			return mindYourBubbles$observedAirBubbleY;
+		}
+
+		if (mindYourBubbles$hasLastObservedAirBubblePosition && mindYourBubbles$lastObservedGuiSizeMatches(guiGraphics)) {
+			return mindYourBubbles$lastObservedAirBubbleY;
+		}
+
 		int airY = guiGraphics.guiHeight() - 49;
 		LivingEntity vehicle = getPlayerVehicleWithHealth();
 		int vehicleHearts = getVehicleMaxHearts(vehicle);
@@ -236,6 +285,12 @@ public class AirBarBubblesMixin {
 	}
 
 	@Unique
+	private boolean mindYourBubbles$lastObservedGuiSizeMatches(GuiGraphics guiGraphics) {
+		return mindYourBubbles$lastObservedGuiWidth == guiGraphics.guiWidth()
+				&& mindYourBubbles$lastObservedGuiHeight == guiGraphics.guiHeight();
+	}
+
+	@Unique
 	private void mindYourBubbles$clearAirBarRenderState() {
 		mindYourBubbles$currentPlayer = null;
 		mindYourBubbles$currentVisibilityMode = AirBarVisibilityMode.VANILLA;
@@ -244,7 +299,7 @@ public class AirBarBubblesMixin {
 		mindYourBubbles$currentInWater = false;
 		mindYourBubbles$shouldSkipVanillaAirBar = false;
 		mindYourBubbles$shouldRenderCustomAirBar = false;
-		mindYourBubbles$renderedCustomAirBar = false;
+		mindYourBubbles$observedAirBubbleThisFrame = false;
 	}
 
 }
