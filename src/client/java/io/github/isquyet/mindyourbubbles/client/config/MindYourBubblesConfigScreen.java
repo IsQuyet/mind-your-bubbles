@@ -1,7 +1,7 @@
 package io.github.isquyet.mindyourbubbles.client.config;
 
-import io.github.isquyet.mindyourbubbles.client.MindYourBubblesConfig;
 import io.github.isquyet.mindyourbubbles.client.AirBarVisibilityMode;
+import io.github.isquyet.mindyourbubbles.client.MindYourBubblesConfig;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -28,7 +28,7 @@ public final class MindYourBubblesConfigScreen {
 						AirBarVisibilityMode.class,
 						config.visibilityMode()
 				)
-				.setDefaultValue(AirBarVisibilityMode.VANILLA)
+				.setDefaultValue(MindYourBubblesConfig.defaultVisibilityMode())
 				.setTooltip(Component.translatable("mind-your-bubbles.config.visibility_mode.tooltip"))
 				.setEnumNameProvider(MindYourBubblesConfigScreen::visibilityModeName)
 				.setSaveConsumer(config::setVisibilityMode)
@@ -39,7 +39,7 @@ public final class MindYourBubblesConfigScreen {
 						Component.translatable("mind-your-bubbles.config.smooth_air_bar_animation"),
 						config.smoothAirBarAnimation()
 				)
-				.setDefaultValue(true)
+				.setDefaultValue(MindYourBubblesConfig.defaultSmoothAirBarAnimation())
 				.setTooltip(Component.translatable("mind-your-bubbles.config.smooth_air_bar_animation.tooltip"))
 				.setSaveConsumer(config::setSmoothAirBarAnimation)
 				.build());

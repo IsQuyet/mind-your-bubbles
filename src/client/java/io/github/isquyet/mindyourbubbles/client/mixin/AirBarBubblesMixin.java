@@ -2,8 +2,8 @@ package io.github.isquyet.mindyourbubbles.client.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import io.github.isquyet.mindyourbubbles.client.MindYourBubblesConfig;
 import io.github.isquyet.mindyourbubbles.client.AirBarVisibilityMode;
+import io.github.isquyet.mindyourbubbles.client.MindYourBubblesConfig;
 import io.github.isquyet.mindyourbubbles.client.air.AirBarAnimationPhase;
 import io.github.isquyet.mindyourbubbles.client.air.AirBarAnimationState;
 import io.github.isquyet.mindyourbubbles.client.air.AirBarMath;
@@ -26,6 +26,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Gui.class)
 public class AirBarBubblesMixin {
+	@Unique
+	private static final int BUBBLE_SIZE_PIXELS = 9;
+
+	@Unique
+	private static final int BUBBLE_SPACING_PIXELS = 8;
+
+	@Unique
+	private static final int VANILLA_AIR_BAR_RIGHT_OFFSET_PIXELS = 91;
+
+	@Unique
+	private static final int VANILLA_AIR_BAR_BASELINE_OFFSET_PIXELS = 49;
+
+	@Unique
+	private static final int VANILLA_VEHICLE_HEART_ROW_HEIGHT_PIXELS = 10;
+
 	@Shadow
 	private int tickCount;
 
@@ -131,10 +146,7 @@ public class AirBarBubblesMixin {
 		mindYourBubbles$currentAirIsFull = AirBarMath.isAirFull(mindYourBubbles$currentDisplayedAir, maxAir);
 
 		if (AirBarPolicy.shouldHideFullAirBar(mindYourBubbles$currentVisibilityMode, mindYourBubbles$currentAirIsFull)) {
-			if (mindYourBubbles$currentSmoothAirBarAnimation) {
-				mindYourBubbles$resetAirAnimation(player, mindYourBubbles$currentDisplayedAir, maxAir);
-			}
-
+			mindYourBubbles$resetAirAnimation(player, mindYourBubbles$currentDisplayedAir, maxAir);
 			mindYourBubbles$shouldSkipVanillaAirBar = true;
 			return;
 		}
@@ -216,7 +228,7 @@ public class AirBarBubblesMixin {
 	@Unique
 	private AirBarRenderFrame mindYourBubbles$getImmediateAirBarFrame(int actualAir, int maxAir) {
 		int currentBubbleCount = AirBarMath.getAirBubbleCount(actualAir, maxAir, 0);
-		int targetBubbleCount = AirBarMath.getAirBubbleCount(actualAir, maxAir, -2);
+		int targetBubbleCount = AirBarMath.getAirBubbleCount(actualAir, maxAir, AirBarMath.VANILLA_POPPING_AIR_OFFSET);
 		if (targetBubbleCount < currentBubbleCount) {
 			return AirBarRenderFrame.transition(currentBubbleCount, targetBubbleCount, AirBarAnimationPhase.POPPING);
 		}
@@ -250,8 +262,8 @@ public class AirBarBubblesMixin {
 				continue;
 			}
 
-			int airX = right - (bubble - 1) * 8 - 9;
-			guiGraphics.blitSprite(sprite, airX, airY, 9, 9);
+			int airX = right - (bubble - 1) * BUBBLE_SPACING_PIXELS - BUBBLE_SIZE_PIXELS;
+			guiGraphics.blitSprite(sprite, airX, airY, BUBBLE_SIZE_PIXELS, BUBBLE_SIZE_PIXELS);
 		}
 	}
 
@@ -302,7 +314,7 @@ public class AirBarBubblesMixin {
 			return mindYourBubbles$lastObservedAirBubbleRight;
 		}
 
-		return guiGraphics.guiWidth() / 2 + 91;
+		return guiGraphics.guiWidth() / 2 + VANILLA_AIR_BAR_RIGHT_OFFSET_PIXELS;
 	}
 
 	@Unique
@@ -315,11 +327,11 @@ public class AirBarBubblesMixin {
 			return mindYourBubbles$lastObservedAirBubbleY;
 		}
 
-		int airY = guiGraphics.guiHeight() - 49;
+		int airY = guiGraphics.guiHeight() - VANILLA_AIR_BAR_BASELINE_OFFSET_PIXELS;
 		LivingEntity vehicle = getPlayerVehicleWithHealth();
 		int vehicleHearts = getVehicleMaxHearts(vehicle);
 		if (vehicleHearts > 0) {
-			airY -= getVisibleVehicleHeartRows(vehicleHearts) * 10;
+			airY -= getVisibleVehicleHeartRows(vehicleHearts) * VANILLA_VEHICLE_HEART_ROW_HEIGHT_PIXELS;
 		}
 
 		return airY;

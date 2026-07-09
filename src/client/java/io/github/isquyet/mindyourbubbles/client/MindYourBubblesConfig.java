@@ -27,6 +27,14 @@ public class MindYourBubblesConfig {
 		return instance;
 	}
 
+	public static AirBarVisibilityMode defaultVisibilityMode() {
+		return DEFAULT_VISIBILITY_MODE;
+	}
+
+	public static boolean defaultSmoothAirBarAnimation() {
+		return DEFAULT_SMOOTH_AIR_BAR_ANIMATION;
+	}
+
 	public static void load() {
 		if (Files.notExists(CONFIG_PATH)) {
 			instance = new MindYourBubblesConfig();

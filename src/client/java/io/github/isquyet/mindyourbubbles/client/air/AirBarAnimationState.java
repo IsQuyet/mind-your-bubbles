@@ -1,44 +1,33 @@
 package io.github.isquyet.mindyourbubbles.client.air;
 
 public final class AirBarAnimationState {
+	private static final int NO_PLAYER_ID = Integer.MIN_VALUE;
+	private static final int NO_MAX_AIR = Integer.MIN_VALUE;
+	private static final int NO_AIR_VALUE = Integer.MIN_VALUE;
+	private static final int NO_BUBBLE_COUNT = Integer.MIN_VALUE;
+	private static final int NO_TRANSITION_TICK = Integer.MIN_VALUE;
 	private static final int POPPING_TICKS = 2;
 	private static final int BLANK_TICKS = 1;
 
-	private int lastPlayerId = Integer.MIN_VALUE;
-	private int lastMaxAir = Integer.MIN_VALUE;
-	private int lastActualAir = Integer.MIN_VALUE;
-	private int lastVisualBubbleCount = Integer.MIN_VALUE;
-	private int transitionFromBubbleCount = Integer.MIN_VALUE;
-	private int transitionToBubbleCount = Integer.MIN_VALUE;
-	private int transitionStartTick = Integer.MIN_VALUE;
+	private int lastPlayerId = NO_PLAYER_ID;
+	private int lastMaxAir = NO_MAX_AIR;
+	private int lastActualAir = NO_AIR_VALUE;
+	private int lastVisualBubbleCount = NO_BUBBLE_COUNT;
+	private int transitionFromBubbleCount = NO_BUBBLE_COUNT;
+	private int transitionToBubbleCount = NO_BUBBLE_COUNT;
+	private int transitionStartTick = NO_TRANSITION_TICK;
 
 	public AirBarRenderFrame update(int playerId, int actualAir, int maxAir, int currentTick) {
 		int currentBubbleCount = AirBarMath.getAirBubbleCount(actualAir, maxAir, 0);
-		int targetVisualBubbleCount = AirBarMath.getAirBubbleCount(actualAir, maxAir, -2);
+		int targetVisualBubbleCount = AirBarMath.getAirBubbleCount(actualAir, maxAir, AirBarMath.VANILLA_POPPING_AIR_OFFSET);
 
-		if (playerId != lastPlayerId || maxAir != lastMaxAir || lastActualAir == Integer.MIN_VALUE) {
-			lastPlayerId = playerId;
-			lastMaxAir = maxAir;
-			lastActualAir = actualAir;
-			lastVisualBubbleCount = currentBubbleCount;
-			clearTransition();
-
-			if (targetVisualBubbleCount < currentBubbleCount) {
-				startTransition(targetVisualBubbleCount, currentTick);
-				return AirBarRenderFrame.transition(transitionFromBubbleCount, transitionToBubbleCount, AirBarAnimationPhase.POPPING);
-			}
-
-			return AirBarRenderFrame.stable(currentBubbleCount);
+		if (isNewAirContext(playerId, maxAir)) {
+			return initializeAirContext(playerId, actualAir, maxAir, currentTick, currentBubbleCount, targetVisualBubbleCount);
 		}
 
-		if (actualAir > lastActualAir && transitionStartTick != Integer.MIN_VALUE) {
+		if (isAirRecoveringDuringTransition(actualAir)) {
 			if (currentBubbleCount >= transitionFromBubbleCount) {
-				lastPlayerId = playerId;
-				lastMaxAir = maxAir;
-				lastActualAir = actualAir;
-				lastVisualBubbleCount = currentBubbleCount;
-				clearTransition();
-				return AirBarRenderFrame.stable(currentBubbleCount);
+				return stabilizeAirContext(playerId, actualAir, maxAir, currentBubbleCount);
 			}
 
 			if (currentBubbleCount > transitionToBubbleCount) {
@@ -46,30 +35,16 @@ public final class AirBarAnimationState {
 			}
 		}
 
-		if (actualAir >= maxAir || (actualAir > lastActualAir && transitionStartTick == Integer.MIN_VALUE)) {
-			lastPlayerId = playerId;
-			lastMaxAir = maxAir;
-			lastActualAir = actualAir;
-			lastVisualBubbleCount = currentBubbleCount;
-			clearTransition();
-			return AirBarRenderFrame.stable(currentBubbleCount);
+		if (shouldStabilizeRecoveredAir(actualAir, maxAir)) {
+			return stabilizeAirContext(playerId, actualAir, maxAir, currentBubbleCount);
 		}
 
-		if (targetVisualBubbleCount < lastVisualBubbleCount
-				&& (transitionStartTick == Integer.MIN_VALUE || targetVisualBubbleCount < transitionToBubbleCount)) {
+		if (shouldStartBubbleLossTransition(targetVisualBubbleCount)) {
 			startTransition(targetVisualBubbleCount, currentTick);
 		}
 
-		lastPlayerId = playerId;
-		lastMaxAir = maxAir;
-		lastActualAir = actualAir;
-
-		AirBarAnimationPhase phase = getTransitionPhase(currentTick);
-		if (phase == AirBarAnimationPhase.STABLE) {
-			return AirBarRenderFrame.stable(lastVisualBubbleCount);
-		}
-
-		return AirBarRenderFrame.transition(transitionFromBubbleCount, transitionToBubbleCount, phase);
+		rememberAirContext(playerId, actualAir, maxAir);
+		return createCurrentRenderFrame(currentTick);
 	}
 
 	public void reset(int playerId, int actualAir, int maxAir) {
@@ -82,14 +57,72 @@ public final class AirBarAnimationState {
 		clearTransition();
 	}
 
+	private boolean isNewAirContext(int playerId, int maxAir) {
+		return playerId != lastPlayerId || maxAir != lastMaxAir || lastActualAir == NO_AIR_VALUE;
+	}
+
+	private AirBarRenderFrame initializeAirContext(int playerId, int actualAir, int maxAir, int currentTick, int currentBubbleCount, int targetVisualBubbleCount) {
+		rememberAirContext(playerId, actualAir, maxAir);
+		lastVisualBubbleCount = currentBubbleCount;
+		clearTransition();
+
+		if (targetVisualBubbleCount < currentBubbleCount) {
+			startTransition(targetVisualBubbleCount, currentTick);
+			return AirBarRenderFrame.transition(transitionFromBubbleCount, transitionToBubbleCount, AirBarAnimationPhase.POPPING);
+		}
+
+		return AirBarRenderFrame.stable(currentBubbleCount);
+	}
+
+	private boolean isAirRecoveringDuringTransition(int actualAir) {
+		return actualAir > lastActualAir && hasActiveTransition();
+	}
+
+	private boolean shouldStabilizeRecoveredAir(int actualAir, int maxAir) {
+		return actualAir >= maxAir || (actualAir > lastActualAir && !hasActiveTransition());
+	}
+
+	private boolean shouldStartBubbleLossTransition(int targetVisualBubbleCount) {
+		return targetVisualBubbleCount < lastVisualBubbleCount
+				&& (!hasActiveTransition() || targetVisualBubbleCount < transitionToBubbleCount);
+	}
+
+	private AirBarRenderFrame stabilizeAirContext(int playerId, int actualAir, int maxAir, int bubbleCount) {
+		rememberAirContext(playerId, actualAir, maxAir);
+		lastVisualBubbleCount = bubbleCount;
+		clearTransition();
+		return AirBarRenderFrame.stable(bubbleCount);
+	}
+
+	private void rememberAirContext(int playerId, int actualAir, int maxAir) {
+		lastPlayerId = playerId;
+		lastMaxAir = maxAir;
+		lastActualAir = actualAir;
+	}
+
+	private AirBarRenderFrame createCurrentRenderFrame(int currentTick) {
+		AirBarAnimationPhase phase = advanceTransitionPhase(currentTick);
+		if (phase == AirBarAnimationPhase.STABLE) {
+			return AirBarRenderFrame.stable(lastVisualBubbleCount);
+		}
+
+		return AirBarRenderFrame.transition(transitionFromBubbleCount, transitionToBubbleCount, phase);
+	}
+
 	private void startTransition(int targetVisualBubbleCount, int currentTick) {
 		transitionFromBubbleCount = lastVisualBubbleCount;
 		transitionToBubbleCount = targetVisualBubbleCount;
 		transitionStartTick = currentTick;
 	}
 
-	private AirBarAnimationPhase getTransitionPhase(int currentTick) {
-		if (transitionStartTick == Integer.MIN_VALUE) {
+	private AirBarAnimationPhase advanceTransitionPhase(int currentTick) {
+		if (!hasActiveTransition()) {
+			return AirBarAnimationPhase.STABLE;
+		}
+
+		if (currentTick < transitionStartTick) {
+			lastVisualBubbleCount = transitionToBubbleCount;
+			clearTransition();
 			return AirBarAnimationPhase.STABLE;
 		}
 
@@ -107,9 +140,13 @@ public final class AirBarAnimationState {
 		return AirBarAnimationPhase.STABLE;
 	}
 
+	private boolean hasActiveTransition() {
+		return transitionStartTick != NO_TRANSITION_TICK;
+	}
+
 	private void clearTransition() {
-		transitionFromBubbleCount = Integer.MIN_VALUE;
-		transitionToBubbleCount = Integer.MIN_VALUE;
-		transitionStartTick = Integer.MIN_VALUE;
+		transitionFromBubbleCount = NO_BUBBLE_COUNT;
+		transitionToBubbleCount = NO_BUBBLE_COUNT;
+		transitionStartTick = NO_TRANSITION_TICK;
 	}
 }
