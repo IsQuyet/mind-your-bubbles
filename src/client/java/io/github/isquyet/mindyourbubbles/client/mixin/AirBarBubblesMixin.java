@@ -1,5 +1,7 @@
 package io.github.isquyet.mindyourbubbles.client.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import io.github.isquyet.mindyourbubbles.client.MindYourBubblesConfig;
 import io.github.isquyet.mindyourbubbles.client.AirBarVisibilityMode;
 import io.github.isquyet.mindyourbubbles.client.air.AirBarAnimationPhase;
@@ -7,6 +9,7 @@ import io.github.isquyet.mindyourbubbles.client.air.AirBarAnimationState;
 import io.github.isquyet.mindyourbubbles.client.air.AirBarMath;
 import io.github.isquyet.mindyourbubbles.client.air.AirBarPolicy;
 import io.github.isquyet.mindyourbubbles.client.air.AirBarRenderFrame;
+import io.github.isquyet.mindyourbubbles.client.air.AirSupplySyncState;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +22,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Gui.class)
@@ -74,6 +76,9 @@ public class AirBarBubblesMixin {
 	private boolean mindYourBubbles$currentInWater;
 
 	@Unique
+	private int mindYourBubbles$currentDisplayedAir;
+
+	@Unique
 	private boolean mindYourBubbles$shouldSkipVanillaAirBar;
 
 	@Unique
@@ -120,44 +125,43 @@ public class AirBarBubblesMixin {
 		mindYourBubbles$currentSmoothAirBarAnimation = config.smoothAirBarAnimation();
 
 		int maxAir = player.getMaxAirSupply();
-		int actualAir = player.getAirSupply();
-		mindYourBubbles$currentAirIsFull = AirBarMath.isAirFull(actualAir, maxAir);
+		int actualAir = mindYourBubbles$getRenderAirSupply(player, maxAir);
 		mindYourBubbles$currentInWater = player.isEyeInFluid(FluidTags.WATER);
+		mindYourBubbles$currentDisplayedAir = actualAir;
+		mindYourBubbles$currentAirIsFull = AirBarMath.isAirFull(mindYourBubbles$currentDisplayedAir, maxAir);
 
 		if (AirBarPolicy.shouldHideFullAirBar(mindYourBubbles$currentVisibilityMode, mindYourBubbles$currentAirIsFull)) {
 			if (mindYourBubbles$currentSmoothAirBarAnimation) {
-				mindYourBubbles$resetAirAnimation(player, actualAir, maxAir);
+				mindYourBubbles$resetAirAnimation(player, mindYourBubbles$currentDisplayedAir, maxAir);
 			}
 
 			mindYourBubbles$shouldSkipVanillaAirBar = true;
 			return;
 		}
 
-		if (mindYourBubbles$currentSmoothAirBarAnimation
-				&& maxAir > 0
-				&& AirBarPolicy.shouldRenderAirBar(mindYourBubbles$currentVisibilityMode, mindYourBubbles$currentInWater, actualAir, maxAir)) {
+		if (maxAir > 0 && mindYourBubbles$shouldRenderCustomAirBar(mindYourBubbles$currentDisplayedAir, maxAir)) {
 			mindYourBubbles$shouldSkipVanillaAirBar = true;
 			mindYourBubbles$shouldRenderCustomAirBar = true;
 		}
 	}
 
-	@Redirect(
+	@WrapOperation(
 			method = "renderPlayerHealth",
 			at = @At(
 					value = "INVOKE",
 					target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V"
 			)
 	)
-	private void mindYourBubbles$redirectAirBubbleSprite(GuiGraphics guiGraphics, ResourceLocation sprite, int x, int y, int width, int height) {
+	private void mindYourBubbles$wrapAirBubbleSprite(GuiGraphics guiGraphics, ResourceLocation sprite, int x, int y, int width, int height, Operation<Void> originalOperation) {
 		if (!mindYourBubbles$isAirBubbleSprite(sprite)) {
-			guiGraphics.blitSprite(sprite, x, y, width, height);
+			originalOperation.call(guiGraphics, sprite, x, y, width, height);
 			return;
 		}
 
 		mindYourBubbles$recordObservedAirBubblePosition(guiGraphics, x, y, width);
 
 		if (!mindYourBubbles$shouldSkipVanillaAirBar) {
-			guiGraphics.blitSprite(sprite, x, y, width, height);
+			originalOperation.call(guiGraphics, sprite, x, y, width, height);
 			return;
 		}
 	}
@@ -171,9 +175,9 @@ public class AirBarBubblesMixin {
 
 		int maxAir = mindYourBubbles$currentPlayer.getMaxAirSupply();
 		if (mindYourBubbles$shouldRenderCustomAirBar) {
-			mindYourBubbles$renderSmoothAirBar(guiGraphics, mindYourBubbles$currentPlayer, mindYourBubbles$getAirBubbleRight(guiGraphics), mindYourBubbles$getAirBubbleY(guiGraphics));
+			mindYourBubbles$renderCustomAirBar(guiGraphics, mindYourBubbles$currentPlayer, mindYourBubbles$getAirBubbleRight(guiGraphics), mindYourBubbles$getAirBubbleY(guiGraphics));
 		} else if (maxAir > 0 && AirBarPolicy.shouldForceFullAirBar(mindYourBubbles$currentVisibilityMode, mindYourBubbles$currentAirIsFull, mindYourBubbles$currentInWater)) {
-			mindYourBubbles$resetAirAnimation(mindYourBubbles$currentPlayer, mindYourBubbles$currentPlayer.getAirSupply(), maxAir);
+			mindYourBubbles$resetAirAnimation(mindYourBubbles$currentPlayer, mindYourBubbles$currentDisplayedAir, maxAir);
 			mindYourBubbles$renderAirBarFrame(guiGraphics, mindYourBubbles$getAirBubbleRight(guiGraphics), mindYourBubbles$getAirBubbleY(guiGraphics), AirBarRenderFrame.stable(AirBarMath.FULL_BUBBLE_COUNT));
 		}
 
@@ -181,9 +185,9 @@ public class AirBarBubblesMixin {
 	}
 
 	@Unique
-	private boolean mindYourBubbles$renderSmoothAirBar(GuiGraphics guiGraphics, Player player, int right, int airY) {
+	private boolean mindYourBubbles$renderCustomAirBar(GuiGraphics guiGraphics, Player player, int right, int airY) {
 		int maxAir = player.getMaxAirSupply();
-		int actualAir = maxAir <= 0 ? player.getAirSupply() : AirBarMath.clampAir(player.getAirSupply(), maxAir);
+		int actualAir = maxAir <= 0 ? player.getAirSupply() : mindYourBubbles$currentDisplayedAir;
 		boolean shouldRender = AirBarPolicy.shouldRenderAirBar(mindYourBubbles$currentVisibilityMode, mindYourBubbles$currentInWater, actualAir, maxAir);
 
 		if (maxAir <= 0 || !shouldRender) {
@@ -191,9 +195,46 @@ public class AirBarBubblesMixin {
 			return false;
 		}
 
-		AirBarRenderFrame renderFrame = mindYourBubbles$animationState.update(player.getId(), actualAir, maxAir, tickCount);
+		AirBarRenderFrame renderFrame = mindYourBubbles$currentSmoothAirBarAnimation
+				? mindYourBubbles$animationState.update(player.getId(), actualAir, maxAir, tickCount)
+				: mindYourBubbles$getImmediateAirBarFrame(actualAir, maxAir);
+		if (!mindYourBubbles$currentSmoothAirBarAnimation) {
+			mindYourBubbles$resetAirAnimation(player, actualAir, maxAir);
+		}
+
 		mindYourBubbles$renderAirBarFrame(guiGraphics, right, airY, renderFrame);
 		return true;
+	}
+
+	@Unique
+	private boolean mindYourBubbles$shouldRenderCustomAirBar(int actualAir, int maxAir) {
+		boolean airBarShouldBeVisible = AirBarPolicy.shouldRenderAirBar(mindYourBubbles$currentVisibilityMode, mindYourBubbles$currentInWater, actualAir, maxAir);
+		return airBarShouldBeVisible
+				&& (mindYourBubbles$currentSmoothAirBarAnimation || mindYourBubbles$currentVisibilityMode != AirBarVisibilityMode.VANILLA);
+	}
+
+	@Unique
+	private AirBarRenderFrame mindYourBubbles$getImmediateAirBarFrame(int actualAir, int maxAir) {
+		int currentBubbleCount = AirBarMath.getAirBubbleCount(actualAir, maxAir, 0);
+		int targetBubbleCount = AirBarMath.getAirBubbleCount(actualAir, maxAir, -2);
+		if (targetBubbleCount < currentBubbleCount) {
+			return AirBarRenderFrame.transition(currentBubbleCount, targetBubbleCount, AirBarAnimationPhase.POPPING);
+		}
+
+		return AirBarRenderFrame.stable(targetBubbleCount);
+	}
+
+	@Unique
+	private int mindYourBubbles$getRenderAirSupply(Player player, int maxAir) {
+		int currentClientAirSupply = player.getAirSupply();
+		if (maxAir <= 0) {
+			return currentClientAirSupply;
+		}
+
+		int renderAirSupply = mindYourBubbles$currentVisibilityMode == AirBarVisibilityMode.VANILLA
+				? currentClientAirSupply
+				: AirSupplySyncState.getAirSupplyOrDefault(player.getId(), currentClientAirSupply);
+		return AirBarMath.clampAir(renderAirSupply, maxAir);
 	}
 
 	@Unique
@@ -297,6 +338,7 @@ public class AirBarBubblesMixin {
 		mindYourBubbles$currentSmoothAirBarAnimation = false;
 		mindYourBubbles$currentAirIsFull = false;
 		mindYourBubbles$currentInWater = false;
+		mindYourBubbles$currentDisplayedAir = 0;
 		mindYourBubbles$shouldSkipVanillaAirBar = false;
 		mindYourBubbles$shouldRenderCustomAirBar = false;
 		mindYourBubbles$observedAirBubbleThisFrame = false;

@@ -20,9 +20,15 @@ public final class AirBarAnimationState {
 			lastPlayerId = playerId;
 			lastMaxAir = maxAir;
 			lastActualAir = actualAir;
-			lastVisualBubbleCount = targetVisualBubbleCount;
+			lastVisualBubbleCount = currentBubbleCount;
 			clearTransition();
-			return AirBarRenderFrame.stable(targetVisualBubbleCount);
+
+			if (targetVisualBubbleCount < currentBubbleCount) {
+				startTransition(targetVisualBubbleCount, currentTick);
+				return AirBarRenderFrame.transition(transitionFromBubbleCount, transitionToBubbleCount, AirBarAnimationPhase.POPPING);
+			}
+
+			return AirBarRenderFrame.stable(currentBubbleCount);
 		}
 
 		if (actualAir > lastActualAir && transitionStartTick != Integer.MIN_VALUE) {
@@ -72,7 +78,7 @@ public final class AirBarAnimationState {
 		lastActualAir = actualAir;
 		lastVisualBubbleCount = maxAir <= 0
 				? AirBarMath.FULL_BUBBLE_COUNT
-				: AirBarMath.getAirBubbleCount(AirBarMath.clampAir(actualAir, maxAir), maxAir, -2);
+				: AirBarMath.getAirBubbleCount(AirBarMath.clampAir(actualAir, maxAir), maxAir, 0);
 		clearTransition();
 	}
 
