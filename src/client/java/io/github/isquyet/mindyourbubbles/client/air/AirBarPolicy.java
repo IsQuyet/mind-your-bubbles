@@ -15,6 +15,10 @@ public final class AirBarPolicy {
 	}
 
 	public static boolean shouldRenderAirBar(AirBarVisibilityMode visibilityMode, boolean inWater, int actualAir, int maxAir) {
+		if (maxAir <= 0) {
+			return false;
+		}
+
 		return inWater || actualAir < maxAir || visibilityMode == AirBarVisibilityMode.ALWAYS;
 	}
 }

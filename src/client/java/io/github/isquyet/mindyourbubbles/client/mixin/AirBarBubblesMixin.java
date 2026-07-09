@@ -1,7 +1,7 @@
 package io.github.isquyet.mindyourbubbles.client.mixin;
 
-import io.github.isquyet.mindyourbubbles.client.MindYourBubblesConfig;
 import io.github.isquyet.mindyourbubbles.client.AirBarVisibilityMode;
+import io.github.isquyet.mindyourbubbles.client.MindYourBubblesConfig;
 import io.github.isquyet.mindyourbubbles.client.air.AirBarAnimationPhase;
 import io.github.isquyet.mindyourbubbles.client.air.AirBarAnimationState;
 import io.github.isquyet.mindyourbubbles.client.air.AirBarMath;
@@ -23,6 +23,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Gui.class)
 public class AirBarBubblesMixin {
+	@Unique
+	private static final int BUBBLE_SIZE_PIXELS = 9;
+
+	@Unique
+	private static final int BUBBLE_SPACING_PIXELS = 8;
+
 	@Shadow
 	private int tickCount;
 
@@ -47,7 +53,7 @@ public class AirBarBubblesMixin {
 	private final AirBarAnimationState mindYourBubbles$animationState = new AirBarAnimationState();
 
 	@Inject(method = "renderAirBubbles", at = @At("HEAD"), cancellable = true)
-	private void mindYourBubbles$hideFullAirBar(GuiGraphics guiGraphics, Player player, int vehicleHearts, int y, int right, CallbackInfo callbackInfo) {
+	private void mindYourBubbles$handleAirBubbleRendering(GuiGraphics guiGraphics, Player player, int vehicleHearts, int y, int right, CallbackInfo callbackInfo) {
 		MindYourBubblesConfig config = MindYourBubblesConfig.get();
 		AirBarVisibilityMode visibilityMode = config.visibilityMode();
 		boolean smoothAirBarAnimation = config.smoothAirBarAnimation();
@@ -57,10 +63,7 @@ public class AirBarBubblesMixin {
 		boolean inWater = player.isEyeInFluid(FluidTags.WATER);
 
 		if (AirBarPolicy.shouldHideFullAirBar(visibilityMode, airIsFull)) {
-			if (smoothAirBarAnimation) {
-				mindYourBubbles$resetAirAnimation(player, actualAir, maxAir);
-			}
-
+			mindYourBubbles$resetAirAnimation(player, actualAir, maxAir);
 			callbackInfo.cancel();
 			return;
 		}
@@ -107,8 +110,8 @@ public class AirBarBubblesMixin {
 				continue;
 			}
 
-			int airX = right - (bubble - 1) * 8 - 9;
-			guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, airX, airY, 9, 9);
+			int airX = right - (bubble - 1) * BUBBLE_SPACING_PIXELS - BUBBLE_SIZE_PIXELS;
+			guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, airX, airY, BUBBLE_SIZE_PIXELS, BUBBLE_SIZE_PIXELS);
 		}
 	}
 
@@ -128,5 +131,4 @@ public class AirBarBubblesMixin {
 
 		return AIR_EMPTY_SPRITE;
 	}
-
 }
