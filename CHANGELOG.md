@@ -6,6 +6,11 @@ Everything above the line is ignored. Everything below the line is used as the r
 
 ----------
 
-## Changes
+## Features
 
 - Added a bundled mod icon visible in Mod Menu.
+
+## Fixes
+
+- Fixed air bubbles sometimes disappearing without their popping animation when the air bar starts rendering during a popping window.
+- Fixed stale animation state after air bar resets so popping frames are less likely to be skipped.
